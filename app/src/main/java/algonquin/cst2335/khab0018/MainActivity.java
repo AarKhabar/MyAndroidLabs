@@ -8,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -25,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
         CheckBox checkBox = findViewById(R.id.check);
         RadioButton radioButton = findViewById(R.id.radio);
         Switch sw = findViewById(R.id.sw);
+        ImageView myimage = findViewById( R.id.myimage );
+        ImageButton ib = findViewById(R.id.imagebtn);
         //String editString = myedit.getText().toString();
 
         btn.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +68,19 @@ public class MainActivity extends AppCompatActivity {
             toast.show();
         });
 
+        ib.setOnClickListener( (vw) -> {
+            int width = vw.getWidth();
+
+            int height = vw.getHeight();
+
+            Context context = getApplicationContext();
+            CharSequence text = "The width = " + width + " and height = " + height ;
+            int duration = Toast.LENGTH_SHORT;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+
+        });
     }
 
 }

@@ -2,5 +2,5 @@
 <resources>
     <string name="app_name">Aar Khabar\'s Android Labs</string>
     <string name="hello_message">Bonjour tout le monde</string>
-    <string name="button_message">Je suis un boutton</string>
+    <string name="button_message">Boutton</string>
 </resources>

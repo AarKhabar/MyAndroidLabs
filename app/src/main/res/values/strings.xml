@@ -4,5 +4,5 @@
     <string name="button1">Button 1</string>
     <string name="button2">Button 2</string>
     <string name="button3">Button 3</string>
-    <string name="spin_message">Spig Flag</string>
+    <string name="spin_message">Spin Flag</string>
 </resources>

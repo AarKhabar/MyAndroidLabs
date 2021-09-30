@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Aar Khabar\'s Android Labs</string>
+    <string name="hello_message">Hello World!</string>
+    <string name="button1">Badhanka 1</string>
+    <string name="button2">Badhanka 2</string>
+    <string name="button3">Badhanka 3</string>
+</resources>

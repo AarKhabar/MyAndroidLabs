@@ -37,10 +37,14 @@ public class SecondActivity extends AppCompatActivity {
         String emailAddress = fromPrevious.getStringExtra("EmailAddress");
         next.setText("Welcome back "+emailAddress);
 
+        SharedPreferences preferences = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String phone =  preferences.getString("phone", "");
+        phoneNumber.setText(phone);
+
         Button btn = findViewById(R.id.button2);
         btn.setOnClickListener(clk -> {
             Intent call = new Intent(Intent.ACTION_DIAL);
-            call.setData(Uri.parse("tel:" + phoneNumber));
+            call.setData(Uri.parse("tel:" + phoneNumber.getText().toString()));
             startActivity(call);
         });
 
@@ -57,38 +61,53 @@ public class SecondActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("name", "value");
         editor.apply();
+        ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getResultCode() == Activity.RESULT_OK) {
+                            Intent data = result.getData();
+                            File MyData = getFilesDir();
+                            Bitmap thumbnail = data.getParcelableExtra("data");
+                            img.setImageBitmap(thumbnail);
 
-        btn2.setOnClickListener( clk ->{
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
-                    new ActivityResultContracts.StartActivityForResult() ,
-                    new ActivityResultCallback<ActivityResult>() {
-                        @Override
-                        public void onActivityResult(ActivityResult result) {
-                            if (result.getResultCode() == Activity.RESULT_OK) {
-                                Intent data = result.getData();
-                                File whereAmI =  getFilesDir();
-                                Bitmap thumbnail = data.getParcelableExtra("data");
-                                FileOutputStream fOut = null;
-                                try {
-                                    fOut = openFileOutput("Picture.png", Context.MODE_PRIVATE);
-                                    thumbnail.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-                                    fOut.flush();
-                                    fOut.close();
 
-                                } catch (FileNotFoundException e) {
-                                    e.printStackTrace();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-                                img.setImageBitmap(thumbnail);
+                            FileOutputStream fOut = null;
+                            try {
+                                fOut = openFileOutput("Picture.png", Context.MODE_PRIVATE);
+                                thumbnail.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                                fOut.flush();
+                                fOut.close();
                             }
+                            catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+
                         }
-                    });
+                    }
+                });
+
+
+        btn2.setOnClickListener(clk -> {
+            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             cameraResult.launch(cameraIntent);
 
         });
 
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        EditText phoneNumber = findViewById(R.id.editTextPhone);
+        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
+        String phone =  phoneNumber.getText().toString();
+
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString("phone", phone);
+        editor.apply();
     }
 }

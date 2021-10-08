@@ -50,9 +50,9 @@ public class SecondActivity extends AppCompatActivity {
 
         Button btn2 = findViewById(R.id.button3);
         ImageButton img = findViewById(R.id.imageButton);
-        File file = new File( getFilesDir(), "filename");
+        File file = new File( getFilesDir(), "Picture.png");
         if(file.exists()) {
-            Bitmap theImage = BitmapFactory.decodeFile("Picture.png");
+            Bitmap theImage = BitmapFactory.decodeFile(file.getAbsolutePath());
             img.setImageBitmap(theImage);
         }
         SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
@@ -61,6 +61,7 @@ public class SecondActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString("name", "value");
         editor.apply();
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         ActivityResultLauncher<Intent> cameraResult = registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 new ActivityResultCallback<ActivityResult>() {
@@ -91,7 +92,7 @@ public class SecondActivity extends AppCompatActivity {
 
 
         btn2.setOnClickListener(clk -> {
-            Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
             cameraResult.launch(cameraIntent);
 
         });

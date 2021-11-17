@@ -125,7 +125,7 @@ public class ChatRoom extends AppCompatActivity {
                 super(itemView);
                 itemView.setOnClickListener(click -> {
                             int position = getAbsoluteAdapterPosition();
-                            ChatMessage removeMessage = messages.get(position);
+                            ChatMessage removedMessage = messages.get(position);
                             MyRowViews newRow = chatAdapter.onCreateViewHolder(null, chatAdapter.getItemViewType(position));
 
                     AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
@@ -137,10 +137,14 @@ public class ChatRoom extends AppCompatActivity {
                                 chatAdapter.notifyItemRemoved(position);
                                 Snackbar.make(messageText, "You deleted message #" + position, Snackbar.LENGTH_LONG)
                                         .setAction("Undo", clk ->{
-                                         messages.add(position, removeMessage);
+                                         messages.add(position, removedMessage);
                                          chatAdapter.notifyItemInserted(position);
+                                         db.execSQL("Insert into " + MyOpenHelper.TABLE_NAME + " values('" + removedMessage.getId()+
+                                        "','" + removedMessage.getMessage() +
+                                        "','" + removedMessage.getSendOrReceive() +
+                                        "','" + removedMessage.getTimeSent() + "');");
                                         }).show();
-
+                                db.delete(MyOpenHelper.TABLE_NAME, "_id=?", new String[] { Long.toString(removedMessage.getId()) });
 
                             }).create().show();
 

@@ -1,19 +1,30 @@
 package algonquin.cst2335.khab0018;
 
+import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.navigation.NavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -40,38 +51,115 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 public class MainActivity extends AppCompatActivity {
-    /**
-     * This holds the text to the centre of the screen
+    /* This holds the text to the centre of the screen
      */
     private TextView tv = null;
-    /**
-     * This holds the password to the centre of the screen
+    /* This holds the password to the centre of the screen
      */
     private EditText cityText = null;
-    /**
-     * This holds the button to the centre of the screen
+    /* This holds the button to the centre of the screen
      */
     private Button forecastBtn = null;
-    /**
-     * This string represents the address of the server we will connect to
+    /* This string represents the address of the server we will connect to
      */
+
+
     private String stringURL;
-
     Bitmap image;
+    ImageView iv ;
+    float oldSize = 14;
 
-    ImageView iv = null;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_activity_actions, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected( MenuItem item) {
+        TextView currentTemp = findViewById(R.id.temp);
+        TextView maxTemp = findViewById(R.id.maxTemp);
+        TextView minTemp = findViewById(R.id.minTemp);
+        TextView humidityT = findViewById(R.id.humitidy);
+        TextView descriptionT = findViewById(R.id.description);
+        ImageView icon = findViewById(R.id.icon);
+        EditText cityField = findViewById(R.id.cityTextField);
+        switch (item.getItemId())
+        {
+            case 5:
+                String cityName = item.getTitle().toString();
+                runForecast(cityName);
+
+            case R.id.hide_views:
+                currentTemp.setVisibility(View.INVISIBLE);
+                maxTemp.setVisibility(View.INVISIBLE);
+                minTemp.setVisibility(View.INVISIBLE);
+                humidityT.setVisibility(View.INVISIBLE);
+                descriptionT.setVisibility(View.INVISIBLE);
+                icon.setVisibility(View.INVISIBLE);
+                cityField.setText("");
+
+                break;
+
+            case R.id.id_increase:
+                oldSize++;
+                currentTemp.setTextSize(oldSize);
+                minTemp.setTextSize(oldSize);
+                maxTemp.setTextSize(oldSize);
+                humidityT.setTextSize(oldSize);
+                descriptionT.setTextSize(oldSize);
+                cityField.setTextSize(oldSize);
+                break;
+            case R.id.id_decrease:
+                oldSize = Float.max(oldSize-1,5);
+                currentTemp.setTextSize(oldSize);
+                minTemp.setTextSize(oldSize);
+                maxTemp.setTextSize(oldSize);
+                humidityT.setTextSize(oldSize);
+                descriptionT.setTextSize(oldSize);
+                cityField.setTextSize(oldSize);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
         cityText = findViewById(R.id.cityTextField);
         forecastBtn = findViewById(R.id.forecastButton);
 
+       DrawerLayout drawer = findViewById(R.id.drawer_layout);
+
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, myToolbar, R.string.open, R.string.close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = findViewById(R.id.popout_menu);
+        navigationView.setNavigationItemSelectedListener((item) -> {
+
+            onOptionsItemSelected(item);
+            drawer.closeDrawer(GravityCompat.START);
+            return false;
+        });
+
         forecastBtn.setOnClickListener(clk -> {
+            String cityName = cityText.getText().toString();
+            myToolbar.getMenu().add(0,5,0,cityName).setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            runForecast(cityName);
+                });
+    }
+    private void runForecast(String cityName){
             Executor newThread = Executors.newSingleThreadExecutor();
             newThread.execute(() -> {
-                String cityName = cityText.getText().toString();
                 try {
                     stringURL = "https://api.openweathermap.org/data/2.5/weather?q="
                             + URLEncoder.encode(cityName, "UTF-8")
@@ -85,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                             .lines()
                             .collect(Collectors.joining("\n"));
                     JSONObject theDocument = new JSONObject(text);
+
                     JSONArray weatherArray = theDocument.getJSONArray("weather");
                     JSONObject position0 = weatherArray.getJSONObject(0);
 
@@ -110,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
                             image = BitmapFactory.decodeStream(imgConnection.getInputStream());
                             image.compress(Bitmap.CompressFormat.PNG, 100, openFileOutput(iconName + ".png", Activity.MODE_PRIVATE));
                         }
+
                         FileOutputStream fOut = null;
                         try {
                             fOut = openFileOutput( iconName + ".png", Context.MODE_PRIVATE);
@@ -145,12 +235,13 @@ public class MainActivity extends AppCompatActivity {
                         tv.setText(description);
                         tv.setVisibility(View.VISIBLE);
                     });
-                }
 
-                catch (IOException | JSONException ioe) {
+
+                } catch (IOException  | JSONException ioe)  {
                     Log.e("Connection error:", ioe.getMessage());
                 }
             });
-        });
-    }
+        }
 }
+
+

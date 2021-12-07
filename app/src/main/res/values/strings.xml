@@ -2,4 +2,6 @@
     <string name="app_name">Aar Khabar\'s Android Labs</string>
     <string name="hello_message">Type in the name of a city:</string>
     <string name="button_message">Get Forecast</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
 </resources>

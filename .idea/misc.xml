@@ -3,7 +3,16 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout-sw600dp/empty_layout.xml" value="0.1" />
         <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/details.xml" value="0.13020833333333334" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/details_layout.xml" value="0.264" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/empty_layout.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/owl_saved.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/popout_header.xml" value="0.176" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/popout_menu.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/layout/sent_message.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/menu/main_activity_actions.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/aarna/AndroidStudioProjects/AarKhabarsAndroidLabs/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.24583333333333332" />
       </map>
     </option>
